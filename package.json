@@ -1,0 +1,22 @@
+{
+  "name": "appointmentmanagement",
+  "version": "1.0.0",
+  "description": "This is an open source project from [DevProjects](http://www.codementor.io/projects). Feedback and questions are welcome!\r Find the project requirements here: [Appointment management system](https://www.codementor.io/projects/web/appointment-management-system-compu19a0t)",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "concurrently \"npm run client\" \"npm run server\"",
+    "client": "npm run dev --prefix frontend",
+    "server": "npm run dev --prefix backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
+}
