@@ -1,14 +1,7 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { userAtom } from '../atoms';
-import { useAtomValue } from 'jotai';
-import useAuth from '../hooks/auth';
+import { Link } from 'react-router-dom';
 import { ROUTES } from '../constants';
 
 const HomePage = () => {
-  const navigate = useNavigate();
-  const user = useAtomValue(userAtom);
-
   return (
     <section className="flex items-center flex-col">
       <h1 className="text-3xl mb-6">Welcome to Appointment manager</h1>

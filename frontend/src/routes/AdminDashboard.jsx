@@ -1,38 +1,13 @@
-// TODO: private route, needs to check if there is a cookie
-// TODO: needs to check if that is the user role or the admin role and redirect to either dashboards
-
 import { useAtom } from 'jotai';
-import { useEffect } from 'react';
-import { appointmentsAtom, errorAtom } from '../atoms';
+import { errorAtom } from '../atoms';
 import CreateAppointment from './CreateAppointment';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../helpers';
+import useGetAppointments from '../hooks/useGetAppointments';
 
 const AdminDashboard = () => {
-  const [appointments, setAppointments] = useAtom(appointmentsAtom);
-  const [error, setError] = useAtom(errorAtom);
-
-  useEffect(() => {
-    const getAppointments = async () => {
-      try {
-        const appointments = await fetch('/api/appointments/all', {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        const result = await appointments.json();
-
-        if (result) {
-          setAppointments(result);
-        }
-      } catch (error) {
-        setError(error);
-      }
-    };
-
-    getAppointments();
-  }, []);
+  const [error] = useAtom(errorAtom);
+  const { appointments } = useGetAppointments();
   // TODO: Admin can make new appointment based on user ID, see all appointments, edit and delete
   // TODO: Admin can see all users in system, select, edit or delete??? Maybe feature for later
 
@@ -44,7 +19,6 @@ const AdminDashboard = () => {
         <p>There is an error</p>
       ) : (
         <>
-          <pre>{JSON.stringify(appointments, null, 2)}</pre>
           <ul>
             {appointments?.map((appointment) => {
               return (

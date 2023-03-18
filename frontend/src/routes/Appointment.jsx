@@ -2,7 +2,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { appointmentAtom, userAtom } from '../atoms';
 import { useAtom, useAtomValue } from 'jotai';
-import useAuth from '../hooks/auth';
+import useAuth from '../hooks/useAuth';
 import { ROUTES } from '../constants';
 import { formatDate } from '../helpers';
 import CreateAppointment from './CreateAppointment';

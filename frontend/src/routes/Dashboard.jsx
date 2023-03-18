@@ -1,42 +1,19 @@
-// TODO: needs to check if that is the user role or the admin role and redirect to either dashboards
-import { useAtom, useAtomValue } from 'jotai';
-import { appointmentsAtom, userAtom } from '../atoms';
 import AdminDashboard from './AdminDashboard';
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../helpers';
+import useGetUserRole from '../hooks/useGetUserRole';
+import useGetAppointments from '../hooks/useGetAppointments';
+import CreateAppointment from './CreateAppointment';
 
 const Dashboard = () => {
   // TODO: User can make new appointment, see their appointments, edit and delete
-  const user = useAtomValue(userAtom);
-  const isAdmin = user?.role === 'admin';
-  const [appointments, setAppointments] = useAtom(appointmentsAtom);
+  const { appointments } = useGetAppointments();
+  const { role } = useGetUserRole();
+  const isAdmin = role === 'admin';
 
   if (isAdmin) {
     return <AdminDashboard />;
   }
-
-  useEffect(() => {
-    const getAppointments = async () => {
-      try {
-        const userAppointments = await fetch('/api/appointments', {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        const result = await userAppointments.json();
-
-        if (result) {
-          setAppointments(result);
-        }
-      } catch (error) {
-        console.log({ error });
-      }
-    };
-
-    getAppointments();
-  }, []);
 
   return (
     <>
@@ -62,6 +39,7 @@ const Dashboard = () => {
           </div>
         );
       })}
+      <CreateAppointment />
     </>
   );
 };

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuth from '../hooks/auth';
+import useAuth from '../hooks/useAuth';
 import { ROUTES } from '../constants';
 
 const PrivateRoute = ({ children }) => {
@@ -11,7 +11,7 @@ const PrivateRoute = ({ children }) => {
     if (!isAuthenticated) {
       return navigate(ROUTES.login, { replace: true });
     }
-  }, []);
+  }, [isAuthenticated, navigate]);
 
   return children;
 };

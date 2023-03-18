@@ -1,6 +1,6 @@
 import { useRouteError } from 'react-router-dom';
 import Header from '../components/Header';
-import useAuth from '../hooks/auth';
+import useAuth from '../hooks/useAuth';
 
 const ErrorPage = () => {
   const { logout } = useAuth();

@@ -46,7 +46,7 @@ const useAuth = () => {
     }
   };
 
-  const signIn = async () => {
+  const signIn = async (formData) => {
     try {
       const signIn = await fetch('/api/users/sign-in', {
         method: 'POST',

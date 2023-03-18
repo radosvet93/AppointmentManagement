@@ -1,13 +1,14 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
-import { appointmentsAtom, userAtom } from '../atoms';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import useAuth from '../hooks/auth';
-import { ROUTES } from '../constants';
-import { formatDate } from '../helpers';
+import { appointmentsAtom } from '../atoms';
+import { useAtom } from 'jotai';
 import { useForm } from 'react-hook-form';
 
 const CreateAppointment = ({ assignTo }) => {
+  const today = new Date();
+  today.setUTCHours(today.getUTCHours() + 4);
+
+  const minDate = today.toISOString().slice(0, -8);
+
   const [appointments, setAppointments] = useAtom(appointmentsAtom);
 
   const [message, setMessage] = useState('');
@@ -19,33 +20,65 @@ const CreateAppointment = ({ assignTo }) => {
   const onSubmit = async (formData) => {
     console.log('formData', formData);
 
-    try {
-      const createAppointmentForUser = await fetch(`/api/appointments/${formData.assign}/create`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+    // TODO: create hook for the creating appointments
 
-      const result = await createAppointmentForUser.json();
+    if (assignTo) {
+      try {
+        const createAppointmentForUser = await fetch(`/api/appointments/${formData.assign}/create`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
 
-      setAppointments([
-        ...appointments,
-        {
-          owner: formData.assign,
-          date: formData.date,
-          description: formData.description,
-          name: formData.name,
-        },
-      ]);
+        const result = await createAppointmentForUser.json();
 
-      if (result) {
-        setMessage(result.message);
+        setAppointments([
+          ...appointments,
+          {
+            owner: formData.assign,
+            date: formData.date,
+            description: formData.description,
+            name: formData.name,
+          },
+        ]);
+
+        if (result) {
+          setMessage(result.message);
+        }
+      } catch (error) {
+        setMessage('There was an error creating the appointment');
+        console.log({ error });
       }
-    } catch (error) {
-      setMessage('There was an error creating the appointment');
-      console.log({ error });
+    } else {
+      try {
+        const createAppointment = await fetch(`/api/appointments`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await createAppointment.json();
+
+        setAppointments([
+          ...appointments,
+          {
+            date: formData.date,
+            description: formData.description,
+            name: formData.name,
+          },
+        ]);
+
+        if (result) {
+          setMessage(result.message);
+        }
+      } catch (error) {
+        setMessage('There was an error creating the appointment');
+        console.log({ error });
+      }
     }
   };
 
@@ -86,13 +119,19 @@ const CreateAppointment = ({ assignTo }) => {
           Date
         </label>
         <input
-          type="text"
-          placeholder="Date"
+          type="datetime-local"
+          min={minDate}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline"
           {...register('date', {
             required: 'date is required',
+            min: minDate,
           })}
         />
+        {errors.date && (
+          <p className="text-danger text-xs italic" role="alert">
+            {errors.date?.message}
+          </p>
+        )}
       </div>
 
       {assignTo ? (
@@ -105,11 +144,17 @@ const CreateAppointment = ({ assignTo }) => {
             placeholder="Assign appointment to..."
             {...register('assign', { required: true })}
           >
-            <option value="">Assign appointment to...</option>
             {assignTo.map((to) => (
-              <option value={to}>{to}</option>
+              <option key={to} value={to}>
+                {to}
+              </option>
             ))}
           </select>
+          {errors.assign && (
+            <p className="text-danger text-xs italic" role="alert">
+              {errors.assign?.message}
+            </p>
+          )}
         </div>
       ) : null}
 
