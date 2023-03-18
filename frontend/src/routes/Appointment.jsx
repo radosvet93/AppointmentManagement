@@ -1,37 +1,28 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { appointmentAtom, userAtom } from '../atoms';
-import { useAtom, useAtomValue } from 'jotai';
-import useAuth from '../hooks/useAuth';
-import { ROUTES } from '../constants';
+import { appointmentAtom } from '../atoms';
+import { useAtom } from 'jotai';
 import { formatDate } from '../helpers';
 import CreateAppointment from './CreateAppointment';
+import axios from 'axios';
 
 const Appointment = () => {
-  const params = useParams();
+  const { id } = useParams();
   const [appointment, setAppointment] = useAtom(appointmentAtom);
 
   useEffect(() => {
     const getAppointment = async () => {
       try {
-        const userAppointments = await fetch(`/api/appointments/${params.id}`, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        const userAppointments = await axios.get(`/api/appointments/${id}`);
 
-        const result = await userAppointments.json();
-
-        if (result) {
-          setAppointment(result);
-        }
+        setAppointment(userAppointments.data);
       } catch (error) {
         console.log({ error });
       }
     };
 
     getAppointment();
-  }, []);
+  }, [id, setAppointment]);
 
   console.log({ appointment });
 

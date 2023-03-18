@@ -2,6 +2,9 @@ import { useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../constants';
+import { useAtomValue } from 'jotai';
+import { errorAtom } from '../atoms';
 
 const LoginPage = () => {
   const {
@@ -10,13 +13,14 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm();
   const { login, isAuthenticated } = useAuth();
+  const error = useAtomValue(errorAtom);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isAuthenticated) {
-      return navigate('/');
+      return navigate(ROUTES.home);
     }
-  }, []);
+  }, [isAuthenticated, navigate]);
 
   const onSubmit = async (formData) => await login(formData);
 

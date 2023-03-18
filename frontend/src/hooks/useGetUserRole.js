@@ -1,29 +1,23 @@
-import { useEffect, useState } from 'react';
-
+import { useEffect } from 'react';
+import { useAtom } from 'jotai';
+import { roleAtom } from '../atoms';
+import axios from 'axios';
 const useGetUserRole = () => {
-  const [role, setRole] = useState();
+  const [role, setRole] = useAtom(roleAtom);
 
   useEffect(() => {
     const getUserRole = async () => {
       try {
-        const userRole = await fetch('/api/users/role', {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        const userRole = await axios.get('/api/users/role');
 
-        const result = await userRole.json();
-
-        if (result) {
-          setRole(result.role);
-        }
+        setRole(userRole.data.role);
       } catch (error) {
         console.log({ error });
       }
     };
 
     getUserRole();
-  }, []);
+  }, [setRole]);
 
   return { role };
 };

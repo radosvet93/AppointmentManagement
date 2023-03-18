@@ -2,16 +2,16 @@ import { useState } from 'react';
 import { appointmentsAtom } from '../atoms';
 import { useAtom } from 'jotai';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
 
 const CreateAppointment = ({ assignTo }) => {
+  const [appointments, setAppointments] = useAtom(appointmentsAtom);
+  const [message, setMessage] = useState('');
   const today = new Date();
   today.setUTCHours(today.getUTCHours() + 4);
 
   const minDate = today.toISOString().slice(0, -8);
 
-  const [appointments, setAppointments] = useAtom(appointmentsAtom);
-
-  const [message, setMessage] = useState('');
   const {
     register,
     handleSubmit,
@@ -24,18 +24,10 @@ const CreateAppointment = ({ assignTo }) => {
 
     if (assignTo) {
       try {
-        const createAppointmentForUser = await fetch(`/api/appointments/${formData.assign}/create`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
-
-        const result = await createAppointmentForUser.json();
+        const createAppointmentForUser = await axios.post(`/api/appointments/${formData.assign}/create`, formData);
 
         setAppointments([
-          ...appointments,
+          ...appointments.data,
           {
             owner: formData.assign,
             date: formData.date,
@@ -43,38 +35,24 @@ const CreateAppointment = ({ assignTo }) => {
             name: formData.name,
           },
         ]);
-
-        if (result) {
-          setMessage(result.message);
-        }
+        setMessage(createAppointmentForUser.message);
       } catch (error) {
         setMessage('There was an error creating the appointment');
         console.log({ error });
       }
     } else {
       try {
-        const createAppointment = await fetch(`/api/appointments`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
-
-        const result = await createAppointment.json();
+        const createAppointment = await axios.post(`/api/appointments`, formData);
 
         setAppointments([
-          ...appointments,
+          ...appointments.data,
           {
             date: formData.date,
             description: formData.description,
             name: formData.name,
           },
         ]);
-
-        if (result) {
-          setMessage(result.message);
-        }
+        setMessage(createAppointment.message);
       } catch (error) {
         setMessage('There was an error creating the appointment');
         console.log({ error });

@@ -17,7 +17,7 @@ const SignInPage = () => {
     if (isAuthenticated) {
       return navigate(ROUTES.home);
     }
-  }, []);
+  }, [isAuthenticated, navigate]);
 
   const onSubmit = async (formData) => await signIn(formData);
 

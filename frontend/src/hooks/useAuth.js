@@ -2,29 +2,20 @@ import { useSetAtom, useAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
 import { isAuthenticatedAtom, userAtom } from '../atoms';
 import { ROUTES } from '../constants';
+import axios from 'axios';
 
 const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useAtom(isAuthenticatedAtom);
-  const navigate = useNavigate();
   const setUser = useSetAtom(userAtom);
+  const navigate = useNavigate();
 
   const login = async (formData) => {
     try {
-      const logIn = await fetch('/api/users/log-in', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const user = await axios.post('/api/users/log-in', formData);
 
-      const user = await logIn.json();
-      setUser(user);
-
-      if (user) {
-        setIsAuthenticated(true);
-        return navigate(ROUTES.dashboard, { replace: true });
-      }
+      setUser(user.data);
+      setIsAuthenticated(true);
+      return navigate(ROUTES.dashboard, { replace: true });
     } catch (error) {
       console.log({ error });
     }
@@ -32,13 +23,7 @@ const useAuth = () => {
 
   const logout = async () => {
     try {
-      await fetch('/api/users/log-out', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
+      await axios.post('/api/users/log-out');
       setIsAuthenticated(false);
       return navigate(ROUTES.home, { replace: true });
     } catch (error) {
@@ -48,21 +33,11 @@ const useAuth = () => {
 
   const signIn = async (formData) => {
     try {
-      const signIn = await fetch('/api/users/sign-in', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const user = await axios.post('/api/users/sign-in', formData);
 
-      const user = await signIn.json();
-      setUser(user);
-
-      if (user) {
-        setIsAuthenticated(true);
-        return navigate(ROUTES.dashboard, { replace: true });
-      }
+      setUser(user.data);
+      setIsAuthenticated(true);
+      return navigate(ROUTES.dashboard, { replace: true });
     } catch (error) {
       console.log({ error });
     }

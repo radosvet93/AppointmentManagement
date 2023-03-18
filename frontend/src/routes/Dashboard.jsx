@@ -7,12 +7,12 @@ import CreateAppointment from './CreateAppointment';
 
 const Dashboard = () => {
   // TODO: User can make new appointment, see their appointments, edit and delete
-  const { appointments } = useGetAppointments();
   const { role } = useGetUserRole();
   const isAdmin = role === 'admin';
+  const { appointments } = useGetAppointments({ isAdmin });
 
   if (isAdmin) {
-    return <AdminDashboard />;
+    return <AdminDashboard appointments={appointments} />;
   }
 
   return (
