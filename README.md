@@ -5,7 +5,8 @@ Find the project requirements here: [Appointment management system](https://www.
 
 ## Tech/framework used
 
-Built with ... TODO: Fill
+- React
+- Express
 
 ## Screenshots and demo
 
