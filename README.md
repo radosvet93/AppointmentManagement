@@ -9,13 +9,19 @@ Find the project requirements here: [Appointment management system](https://www.
 - Express
 
 ## Screenshots and demo
+![screencapture-127-0-0-1-3001-dashboard-2023-04-04-06_40_43](https://user-images.githubusercontent.com/18429009/229698124-b3ff4015-765f-462c-8ab2-ea7f4a1cb349.png)
 
-Screenshots of your app and/or a link to your live demo
 
 ## Installation
+```
+npm install
+```
 
-Instructions for other developers on how to install and run your code on their local environment.
-
+Create a ```.env``` file with:
+```
+MONGOOSE_DB=mongo db URL for the DB
+JWT_SECRET=some secret for JWT
+```
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
