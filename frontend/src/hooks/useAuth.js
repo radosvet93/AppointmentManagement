@@ -1,4 +1,5 @@
 import { useSetAtom, useAtom } from 'jotai';
+import { RESET } from 'jotai/utils'
 import { useNavigate } from 'react-router-dom';
 import { isAuthenticatedAtom, userAtom } from '../atoms';
 import { ROUTES } from '../constants';
@@ -24,8 +25,11 @@ const useAuth = () => {
   const logout = async () => {
     try {
       await axios.post('/api/users/log-out');
-      setIsAuthenticated(false);
-      return navigate(ROUTES.home, { replace: true });
+      setIsAuthenticated(RESET);
+      navigate(ROUTES.home, { replace: true });
+      
+      // Clear all state
+      return navigate(0)
     } catch (error) {
       console.log({ error });
     }

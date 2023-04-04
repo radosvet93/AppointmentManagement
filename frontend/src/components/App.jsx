@@ -2,12 +2,12 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import LoginPage from '../routes/LoginPage';
 import Root from '../root';
 import ErrorPage from '../routes/error-page';
-import Dashboard from '../routes/Dashboard';
+import DashboardPage from '../routes/DashboardPage';
 import PrivateRoute from '../routes/PrivateRoute';
 import { ROUTES } from '../constants';
 import HomePage from '../routes/HomePage';
 import SignInPage from '../routes/SignInPage';
-import Appointment from '../routes/Appointment';
+import GetAppointmentPage from '../routes/GetAppointmentPage';
 
 const App = () => {
   const router = createBrowserRouter([
@@ -24,7 +24,7 @@ const App = () => {
           path: ROUTES.dashboard,
           element: (
             <PrivateRoute>
-              <Dashboard />
+              <DashboardPage />
             </PrivateRoute>
           ),
         },
@@ -38,7 +38,11 @@ const App = () => {
         },
         {
           path: ROUTES.appointment,
-          element: <Appointment />,
+          element: (
+            <PrivateRoute>
+              <GetAppointmentPage />
+            </PrivateRoute>
+          ),
         },
       ],
     },

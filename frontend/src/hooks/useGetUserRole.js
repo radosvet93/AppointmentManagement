@@ -16,8 +16,8 @@ const useGetUserRole = () => {
       }
     };
 
-    getUserRole();
-  }, [setRole]);
+    !role && getUserRole();
+  }, [setRole, role]);
 
   return { role };
 };

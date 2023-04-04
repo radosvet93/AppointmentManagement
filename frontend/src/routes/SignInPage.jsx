@@ -25,6 +25,25 @@ const SignInPage = () => {
     <div className="flex justify-center">
       <form className="bg-secondary shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
+          <label className="block text-gray-900 text-sm font-bold mb-2" htmlFor="name">
+            Name
+          </label>
+          <input
+            type="text"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Name"
+            {...register('name', {
+              required: 'Name is required',
+            })}
+            aria-invalid={errors.name ? 'true' : 'false'}
+          />
+          {errors.name && (
+            <p className="text-danger text-xs italic" role="alert">
+              {errors.name?.message}
+            </p>
+          )}
+        </div>
+        <div className="mb-4">
           <label className="block text-gray-900 text-sm font-bold mb-2" htmlFor="email">
             Email
           </label>

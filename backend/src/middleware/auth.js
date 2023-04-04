@@ -3,7 +3,6 @@ const User = require('../models/userModel');
 
 const auth = async (req, res, next) => {
   try {
-    // const token = req.header('Authorization').replace('Bearer ', '');
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findOne({ _id: decoded._id, token });
@@ -17,7 +16,7 @@ const auth = async (req, res, next) => {
 
     next();
   } catch (error) {
-    res.status(401).send({ error: 'Not authenticated' });
+    res.status(401).send({ message: 'Not authenticated' });
   }
 };
 

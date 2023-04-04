@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useAtom } from 'jotai';
-import { appointmentAtom } from '../atoms';
+import { appointmentsAtom } from '../atoms';
 import axios from 'axios';
 
 const useGetAppointments = ({ isAdmin = false }) => {
-  const [appointments, setAppointments] = useAtom(appointmentAtom);
+  const [appointments, setAppointments] = useAtom(appointmentsAtom);
 
   useEffect(() => {
     const getAppointments = async () => {
